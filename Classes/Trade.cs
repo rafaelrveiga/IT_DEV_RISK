@@ -8,7 +8,7 @@ namespace Mazzatech
         public double Value { get; }
         public string ClientSector { get; }
         public DateTime NextPaymentDate { get; }
-        // public bool IsPoliticallyExposed { get; }
+        //public bool IsPoliticallyExposed { get; }
 
         public Trade(string input)
         {
@@ -26,11 +26,9 @@ namespace Mazzatech
                     case 2:
                         this.NextPaymentDate = Convert.ToDateTime(inputSplitted[i], new CultureInfo("en-US"));
                         break;
-                    // case 3:
-                    //     this.IsPoliticallyExposed = Convert.ToBoolean(inputSplitted[i]);
-                    //     break;
-                    default:
-                        break;
+                    //case 3:
+                    //    this.IsPoliticallyExposed = Convert.ToBoolean(inputSplitted[i]);
+                    //    break;
                 }
             }
         }

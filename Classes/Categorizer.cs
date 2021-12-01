@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 namespace Mazzatech
 {
-    class Categorizer : ICategorizer
+    class Categorizer
     {
-        public DateTime referenceDate { get; }
-        public List<ITrade> trades { get; }
-        public Categorizer(DateTime referenceDate, List<ITrade> trades)
+        private List<ITrade> trades { get; }
+        private List<ICategory> categories { get; }
+
+        public Categorizer(List<ICategory> categories, List<ITrade> trades)
         {
-            this.referenceDate = referenceDate;
+            this.categories = categories;
             this.trades = trades;
         }
 
@@ -18,27 +19,18 @@ namespace Mazzatech
             List<string> output = new List<string>();
             foreach (ITrade trade in trades)
             {
-                output.Add(this.Category(trade));
+                string category;
+                int categoryIterator = 0;
+                
+                do
+                {
+                    category = categories[categoryIterator].GetCategory(trade);
+                    categoryIterator++;
+                } while (category == string.Empty && categoryIterator < categories.Count);
+                
+                output.Add(category);
             }
             return output.ToArray();
-        }
-
-        private string Category(ITrade trade)
-        {
-            if (trade.NextPaymentDate < referenceDate.AddDays(-30))
-                return "EXPIRED";
-            if (trade.Value > 1000000)
-                switch (trade.ClientSector)
-                {
-                    case "Private":
-                        return "HIGHRISK";
-                    case "Public":
-                        return "MEDIUMRISK";
-                }
-            // if (trade.IsPoliticallyExposed)
-            //     return "PEP";
-
-            return string.Empty;
         }
     }
 }
